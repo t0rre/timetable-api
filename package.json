@@ -1,0 +1,23 @@
+{
+  "name": "timetable-api",
+  "version": "1.0.0",
+  "description": "A proxy api for skola24's timetable",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t0rre/timetable-api.git"
+  },
+  "author": "Tor Smedberg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/t0rre/timetable-api/issues"
+  },
+  "homepage": "https://github.com/t0rre/timetable-api#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "https": "^1.0.0"
+  }
+}
