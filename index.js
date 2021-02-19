@@ -6,7 +6,7 @@ const corsAllow = '*';
 
 app.use(express.json())
 
-app.get('/api/signature', function (req, res) {
+app.all('/api/signature', function (req, res) {
     res.append('Access-Control-Allow-Origin', corsAllow);
     console.log('Got request for signature!');
     let data= JSON.stringify({"signature":req.body.signature});
@@ -37,7 +37,7 @@ app.get('/api/signature', function (req, res) {
 });
 
 
-app.get('/api/timetable', function(req,res){
+app.all('/api/timetable', function(req,res){
     res.append('Access-Control-Allow-Origin', corsAllow);
     console.log('Got request for timetable!');
     let data = "null";
