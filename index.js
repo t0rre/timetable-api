@@ -44,7 +44,7 @@ app.get('/api/timetable', function(req,res){
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': data.length,
+          //'Content-Length': data.length,
           'X-Scope': '8a22163c-8662-4535-9050-bc5e1923df48'
         }
       }
@@ -56,7 +56,8 @@ app.get('/api/timetable', function(req,res){
         proxyRes.on('end', function(){
             let renderKey = JSON.parse(resBody).data.key;
             resBody = ''
-            let data= JSON.stringify({
+            console.log('Domain: '+req.body.domain + " unitGuid: " + req.body.unitGuid + " Week: " + req.body.week + " Year: " + req.body.year)
+            data= JSON.stringify({
                 "renderKey":renderKey,
                 "host":req.body.domain,
                 "unitGuid":req.body.unitGuid,
@@ -76,24 +77,14 @@ app.get('/api/timetable', function(req,res){
                 "privateSelectionMode":"null",
                 "customerKey":""
              });
-            let options = {
-                hostname: 'web.skola24.se',
-                port: 443,
-                path: '/api/get/timetable/render/timetable',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length': data.length,
-                    'X-Scope': '8a22163c-8662-4535-9050-bc5e1923df48'
-                }
-            };
+            options.path = '/api/render/timetable'
             let proxyReqTable = https.request(options, function(proxyResTable) {
                 proxyResTable.on('data', function (d) {
                     resBody += d;
                 })
                 proxyResTable.on('end', function(){
                     res.status(200);
-                    res.json({'output':resBody})
+                    res.json({'output':JSON.parse(resBody)})
                 })
             })
             proxyReqTable.write(data);
