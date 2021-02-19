@@ -2,10 +2,12 @@ const https = require('https');
 const express = require('express');
 const app = express();
 const port = 8080;
+const corsAllow = '*';
 
 app.use(express.json())
 
 app.get('/api/signature', function (req, res) {
+    res.append('Access-Control-Allow-Origin', corsAllow);
     console.log('Got request for signature!');
     let data= JSON.stringify({"signature":req.body.signature});
     let options = {
@@ -26,6 +28,7 @@ app.get('/api/signature', function (req, res) {
         })
         proxyRes.on('end', function(){
             res.status(200);
+            res.hea
             res.json({'output':JSON.parse(resBody)})
         })
     })
@@ -35,6 +38,7 @@ app.get('/api/signature', function (req, res) {
 
 
 app.get('/api/timetable', function(req,res){
+    res.append('Access-Control-Allow-Origin', corsAllow);
     console.log('Got request for timetable!');
     let data = "null";
     let options = {
