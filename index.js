@@ -56,7 +56,6 @@ app.get('/api/timetable', function(req,res){
         proxyRes.on('end', function(){
             let renderKey = JSON.parse(resBody).data.key;
             resBody = ''
-            console.log('Domain: '+req.body.domain + " unitGuid: " + req.body.unitGuid + " Week: " + req.body.week + " Year: " + req.body.year)
             data= JSON.stringify({
                 "renderKey":renderKey,
                 "host":req.body.domain,
