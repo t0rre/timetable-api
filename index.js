@@ -1,7 +1,7 @@
 const https = require('https');
 const express = require('express');
 const app = express();
-const port = process.env.PORT | 8080; //get port number from env variable, used by Heroku, otherwise fall back onto port 8080
+const port = process.env.PORT || 8080; //get port number from env variable, used by Heroku, otherwise fall back onto port 8080
 const corsAllow = '*';
 
 app.use(express.json())
@@ -122,4 +122,4 @@ app.all('/api/units', function (req,res){
     proxyReq.write(data);
     proxyReq.end();
 })
-app.listen(port);
+app.listen(port, () =>{console.log('Listening on  '+port)});
