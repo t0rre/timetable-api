@@ -17,7 +17,6 @@ app.all('/api/signature', function (req, res) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Length': data.length,
           'X-Scope': '8a22163c-8662-4535-9050-bc5e1923df48'
         }
       }
@@ -28,7 +27,6 @@ app.all('/api/signature', function (req, res) {
         })
         proxyRes.on('end', function(){
             res.status(200);
-            res.hea
             res.json({'output':JSON.parse(resBody)})
         })
     })
@@ -97,4 +95,31 @@ app.all('/api/timetable', function(req,res){
     proxyReq.write(data);
     proxyReq.end();
 });
+app.all('/api/units', function (req,res){
+    console.log('Got request for units!');
+    let data = JSON.stringify({"getTimetableViewerUnitsRequest":{"hostName":req.body.domain}});
+    let options = {
+        hostname: 'web.skola24.se',
+        port: 443,
+        path: '/api/services/skola24/get/timetable/viewer/units',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          //'Content-Length': data.length,
+          'X-Scope': '8a22163c-8662-4535-9050-bc5e1923df48'
+        }
+      }
+      let resBody = ''
+      let proxyReq = https.request(options, function(proxyRes){
+        proxyRes.on('data', function (d) {
+            resBody += d;
+        })
+        proxyRes.on('end', function(){
+            res.status(200);
+            res.json({'output':JSON.parse(resBody)})
+        })
+      })
+    proxyReq.write(data);
+    proxyReq.end();
+})
 app.listen(port);
