@@ -1,5 +1,7 @@
 const https = require('https');
 const express = require('express');
+const path = require('path');
+const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 8080; //get port number from env variable, used by Heroku, otherwise fall back onto port 8080
 const corsAllow = '*';
@@ -8,7 +10,6 @@ app.use(express.json())
 
 app.all('/api/signature', function (req, res) {
     res.append('Access-Control-Allow-Origin', corsAllow);
-    console.log('Got request for signature!');
     let data= JSON.stringify({"signature":req.body.signature});
     let options = {
         hostname: 'web.skola24.se',
@@ -37,7 +38,6 @@ app.all('/api/signature', function (req, res) {
 
 app.all('/api/timetable', function(req,res){
     res.append('Access-Control-Allow-Origin', corsAllow);
-    console.log('Got request for timetable!');
     let data = "null";
     let options = {
         hostname: 'web.skola24.se',
@@ -96,7 +96,6 @@ app.all('/api/timetable', function(req,res){
     proxyReq.end();
 });
 app.all('/api/units', function (req,res){
-    console.log('Got request for units!');
     let data = JSON.stringify({"getTimetableViewerUnitsRequest":{"hostName":req.body.domain}});
     let options = {
         hostname: 'web.skola24.se',
@@ -121,5 +120,28 @@ app.all('/api/units', function (req,res){
       })
     proxyReq.write(data);
     proxyReq.end();
+})
+app.get('/', function(req,res) 
+{
+    res.status(200);
+    res.sendFile(path.join(__dirname, 'webpage', 'index.html'));
+})
+app.get('/api', function(req,res)
+{
+    res.status(200);
+    res.redirect('https://github.com/t0rre/timetable-api/wiki')
+})
+app.get('/*', function(req,res) {
+    let file = path.join(__dirname,'webpage',req.path.slice(1))
+    if(fs.existsSync(file))
+    {
+        res.status(200);
+        res.sendFile(file);
+    }
+    else
+    {
+        res.status(404);
+        res.sendFile(path.join(__dirname,'webpage','404.html'));
+    }
 })
 app.listen(port, () =>{console.log('Listening on  '+port)});
